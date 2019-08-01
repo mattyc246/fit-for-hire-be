@@ -4,9 +4,9 @@ from flask import Flask
 from models.base_model import db
 
 web_dir = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), 'flask_web')
+    os.path.abspath(__file__)), 'fitforhire_web')
 
-app = Flask('FLASK', root_path=web_dir)
+app = Flask('FITFORHIRE', root_path=web_dir)
 
 if os.getenv('FLASK_ENV') == 'production':
     app.config.from_object("config.ProductionConfig")
