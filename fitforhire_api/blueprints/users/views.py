@@ -1,10 +1,39 @@
 from flask import Blueprint, request, make_response, jsonify
 from models.user import User
 from werkzeug.security import generate_password_hash
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 users_api_blueprint = Blueprint('users_api',
                                 __name__,
                                 template_folder='templates')
+
+
+@users_api_blueprint.route('/', methods=['GET'])
+@jwt_required
+def index():
+    user_id = get_jwt_identity()
+
+    user = User.get_or_none(User.id == user_id)
+
+    if not user:
+        response = {
+            'message': 'No user identified'
+        }
+
+        return make_response(jsonify(response), 401)
+
+    user_info = {
+        'user_id': user.id,
+        'full_name': user.full_name,
+        'username': user.username
+    }
+
+    response = {
+        'message': 'Successfully identified user',
+        'user': user_info
+    }
+
+    return make_response(jsonify(response), 200)
 
 
 @users_api_blueprint.route('/', methods=['POST'])
