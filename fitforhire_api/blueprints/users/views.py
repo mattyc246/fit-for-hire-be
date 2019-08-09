@@ -79,7 +79,8 @@ def search():
 
     users = User.select().where(
         ((User.full_name.contains(query))
-         | (User.username.contains(query))) & User.profession != 'Customer')
+         | (User.username.contains(query))) & (User.profession.not_in(['Customer'])
+                                               ))
 
     results = []
 
