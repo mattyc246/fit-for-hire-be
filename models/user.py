@@ -9,3 +9,4 @@ class User(BaseModel):
     phone_number = pw.CharField(null=False)
     password = pw.CharField(null=False)
     date_of_birth = pw.DateField(null=False)
+    profession = pw.CharField(null=False, default="Customer")
