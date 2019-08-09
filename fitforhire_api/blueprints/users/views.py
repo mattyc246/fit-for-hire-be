@@ -70,3 +70,32 @@ def create():
     }
 
     return make_response(jsonify(response), 400)
+
+
+@users_api_blueprint.route('/search', methods=['GET'])
+@jwt_required
+def search():
+    query = request.args.get('q')
+
+    users = User.select().where(
+        ((User.full_name.contains(query))
+         | (User.username.contains(query))
+         | (User.profession.contains(query))) & (User.profession.not_in(['Customer'])
+                                                 ))
+
+    results = []
+
+    for user in users:
+        results.append({
+            'id': user.id,
+            'full_name': user.full_name,
+            'username': user.username,
+            'phone_number': user.phone_number,
+            'profession': user.profession
+        })
+
+    response = {
+        'users': results
+    }
+
+    return make_response(jsonify(response), 200)
