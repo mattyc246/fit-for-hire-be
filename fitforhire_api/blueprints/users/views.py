@@ -99,3 +99,20 @@ def search():
     }
 
     return make_response(jsonify(response), 200)
+
+
+@users_api_blueprint.route('/me', methods=['GET'])
+@jwt_required
+def fetch_me():
+    user_id = get_jwt_identity()
+
+    user = User.get_by_id(user_id)
+
+    response = {
+        'user': {
+            'id': user.id,
+            'username': user.username
+        }
+    }
+
+    return make_response(jsonify(response), 200)
