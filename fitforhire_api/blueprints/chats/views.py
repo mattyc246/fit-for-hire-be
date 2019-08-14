@@ -74,3 +74,29 @@ def active_chats():
     }
 
     return make_response(jsonify(response), 200)
+
+
+@chats_api_blueprint.route('/last_four', methods=['GET'])
+@jwt_required
+def last_four():
+    user_id = get_jwt_identity()
+
+    chat_rooms = ChatRoom.select().where(ChatRoom.customer_id == user_id).order_by(
+        ChatRoom.created_at.desc()).limit(4)
+
+    chats = []
+
+    for chat in chat_rooms:
+        chats.append({
+            'room_no': chat.room_no,
+            'professional': {
+                'id': chat.professional_id,
+                'username': chat.professional.username
+            }
+        })
+
+    response = {
+        'chats': chats
+    }
+
+    return make_response(jsonify(response), 200)
