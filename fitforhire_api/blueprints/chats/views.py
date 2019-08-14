@@ -31,7 +31,10 @@ def create():
         if chat_room.save():
             response = {
                 'ok': True,
-                'message': 'Room Created'
+                'message': 'Room Created',
+                'professional': {
+                    'username': professional.username
+                }
             }
 
             return make_response(jsonify(response), 200)
@@ -45,7 +48,10 @@ def create():
 
     response = {
         'ok': True,
-        'message': 'Chat exists'
+        'message': 'Chat exists',
+        'professional': {
+            'username': professional.username
+        }
     }
 
     return make_response(jsonify(response), 200)
